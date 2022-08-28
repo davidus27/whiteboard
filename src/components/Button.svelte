@@ -65,6 +65,7 @@
     {/if}
 
     <button
+        id="add-sticker-btn"
         class="add-sticker-btn"
         on:click={() => {
             clicked = !clicked;
@@ -79,6 +80,9 @@
         outline: none;
         /* make a border round */
         border-radius: 50%;
+        /* make border more thick */
+        border-width: 5px;
+
         /* make the button big */
         width: 5rem;
         height: 5rem;

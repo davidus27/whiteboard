@@ -107,9 +107,9 @@
   // this function is used later in the resizing and gesture demos
   window.dragMoveListener = dragMoveListener;
 
-  // if (type != 'sticker') {
-  //   color = 'transparent';
-  // }
+  if (type != 'sticker') {
+    color = 'transparent';
+  }
   
 </script>
 
@@ -128,7 +128,7 @@
     /* set background color to partly transparent */
     background: rgba(204, 204, 204, 0);
     border-color: rgba(204, 204, 204, 0);
-    color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.8);
 
     /* make it a circle */
     width: 30px;
