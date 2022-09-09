@@ -5,7 +5,6 @@
 	onMount(() => {
 		const startElement = document.getElementById("pointer");
 		const endElement = document.getElementById("add-sticker-btn");
-		console.log("start:", startElement, endElement);
 		const line = new LeaderLine(
 			LeaderLine.mouseHoverAnchor(startElement, "draw", {
 				animOptions: {
@@ -23,11 +22,12 @@
 			size: 8,
 		});
 	});
+
 </script>
 
 <div>
-	<h1>Welcome to your whiteboard! 👋</h1>
-	<h3><b id="pointer">Add</b> new stickers or emojis fast and easy</h3>
+	<h1>👋 Welcome to your whiteboard! 📝</h1>
+	<h2><b id="pointer">Add</b> new stickers or emojis fast and easy 🚀</h2>
 	<Whiteboard />
 </div>
 
@@ -38,5 +38,10 @@
 	}
 	h1 {
 		font-size: 3em;
+	}
+
+	.small-icon {
+		width: 32px;
+		height: 32px;
 	}
 </style>
