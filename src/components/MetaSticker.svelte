@@ -1,37 +1,41 @@
 <script>
-  export let
-    position,
-    id,
-    color = "red",
-    resolution,
-    type,
-    updateLines;
+  import { onMount } from "svelte";
 
-  
-  console.log("Created Sticker: ", id);
+  export let position, id, resolution, type, updateLines;
+
+  let panzoom;
+  let color = "#feecd9";
+
+  const updatePanZoom = () => {
+    panzoom?.pan(position.x, position.y);
+  };
+
+  const updateObjects = () => {
+    updateLines();
+    updatePanZoom();
+  };
 
   export let cancelSticker;
 
   const setupModifiers = [
-        // keep the edges inside the parent
-        interact.modifiers.restrictEdges({
-          outer: "parent",
-        }),
-        // minimum size
-        interact.modifiers.restrictSize({
-          min: { width: 150, height: 150 },
-        }),
-      ];
-  
-  if(type != "sticker") {
+    // keep the edges inside the parent
+    interact.modifiers.restrictEdges({
+      outer: "parent",
+    }),
+    // minimum size
+    interact.modifiers.restrictSize({
+      min: { width: 150, height: 150 },
+    }),
+  ];
+
+  if (type != "sticker") {
     setupModifiers.push(
       interact.modifiers.aspectRatio({
         ratio: 1,
       })
-    )
+    );
+    color = "transparent";
   }
-
-  console.log("setupModifiers", setupModifiers);
 
   interact(".resize-drag")
     .resizable({
@@ -41,6 +45,7 @@
       listeners: {
         move(event) {
           let target = event.target;
+
           position.x = parseFloat(target.getAttribute("data-x")) || 0;
           position.y = parseFloat(target.getAttribute("data-y")) || 0;
 
@@ -55,13 +60,13 @@
           target.style.transform =
             "translate(" + position.x + "px," + position.y + "px)";
 
-          target.setAttribute("data-x", position.x);
-          target.setAttribute("data-y", position.y);
-
           resolution.width = event.rect.width + "px";
           resolution.height = event.rect.height + "px";
 
-          updateLines();
+          target.setAttribute("data-x", position.x);
+          target.setAttribute("data-y", position.y);
+
+          updateObjects();
         },
       },
       modifiers: setupModifiers,
@@ -89,7 +94,10 @@
 
   function dragMoveListener(event) {
     let target = event.target;
-    // keep the dragged position in the data-x/data-y attributes
+
+    // position.x += event.dx;
+    // position.y += event.dy;
+
     position.x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
     position.y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
 
@@ -101,29 +109,41 @@
     target.setAttribute("data-x", position.x);
     target.setAttribute("data-y", position.y);
 
-    updateLines();
+    updateObjects();
   }
 
   // this function is used later in the resizing and gesture demos
   window.dragMoveListener = dragMoveListener;
 
-  if (type != 'sticker') {
-    color = 'transparent';
-  }
-  
+  onMount(() => {
+    // const elem = document.getElementById(id);
+    // panzoom = Panzoom(elem, {
+    //   canvas: true,
+    //   excludeClass: "resize-drag",
+    // });
+    // const parent = elem.parentElement;
+    // parent.addEventListener("wheel", panzoom.zoomWithWheel);
+    // elem.addEventListener("panzoomend", (event) => {
+    //   position.x = event.detail.x;
+    //   position.y = event.detail.y;
+    // });
+  });
 </script>
 
-<div {id} class="resize-drag" style="--color:{color};--width:{resolution.width};--height:{resolution.height}">
+<div
+  {id}
+  class="resize-drag"
+  style="--width:{resolution.width};--height:{resolution.height};--color:{color}"
+>
   <button class="close" on:click={() => cancelSticker(id)}>X</button>
-  <slot></slot>
+  <slot />
 </div>
 
 <style>
   .close {
     float: right;
-    display:inline-block;
-    padding:2px 5px;
-    /* background:#ccc; */
+    display: inline-block;
+    padding: 0;
     z-index: 100;
     /* set background color to partly transparent */
     background: rgba(204, 204, 204, 0);
@@ -134,28 +154,24 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
- 
   }
 
   .close:hover {
-    float:right;
-    display:inline-block;
-    padding:2px 5px;
-    background:#ccc;
-    color:#fff;
-}
+    float: right;
+    display: inline-block;
+    padding: 2px 5px;
+    background: #ccc;
+    color: #fff;
+  }
 
   .resize-drag {
-    /* display: flex; */
-    width: var(--width);
-    height: var(--height);
+    width: 200px;
+    height: 200px;
     border-radius: 8px;
     margin: 1rem;
-    background-color: var(--color);
-    font-size: 20px;
-    font-family: sans-serif;
-
-    touch-action: none;
+    background-color: var(
+      --color
+    ); /* #feecd9;
 
     /* This makes things *much* easier */
     box-sizing: border-box;
