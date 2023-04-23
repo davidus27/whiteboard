@@ -4,7 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
-import typescript from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript';
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -63,7 +63,8 @@ export default {
 		typescript({
 			sourceMap: !production,
 			inlineSources: !production,
-			typescript: require('typescript')
+			// typescript: require('typescript'),
+			// cacheRoot: './.rts2_cache', // Adjust the cache directory as needed
 		}),
 
 		// In dev mode, call `npm run start` once

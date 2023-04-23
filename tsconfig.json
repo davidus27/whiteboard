@@ -5,5 +5,7 @@
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
     "isolatedModules": false,
+    "incremental": true,
+    "noEmitOnError": false,
   },
 }
