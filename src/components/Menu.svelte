@@ -11,12 +11,10 @@
         <button
             id="btn"
             on:click={() => {
-                console.log("Stop dragging");
                 menuStore.update((store) => {
                     store.isStageDraggable = false;
                     return store;
                 });
-                console.log("isDraggable", $menuStore.isStageDraggable);
             }}>Stop dragging</button
         >
     {:else}
