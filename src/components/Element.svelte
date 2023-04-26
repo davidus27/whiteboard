@@ -1,0 +1,47 @@
+<svelte:options accessors />
+
+<script lang="ts">
+  import {
+    onMount,
+    onDestroy,
+    setContext,
+    getContext,
+    afterUpdate,
+  } from "svelte";
+  import Konva from "konva";
+  import { parentKey, eventNames, excludeKeys } from "../utils/wrapperUtils";
+  import { createEventDispatcher } from "svelte";
+  const dispatcher = createEventDispatcher();
+
+  const { getParent } = getContext(parentKey);
+  const parent = getParent();
+
+  export let init_only_props = [];
+  export let node: Konva.Shape;
+  setContext(parentKey, {
+    getParent: () => node,
+  });
+
+  onMount(async () => {
+    parent.add(node);
+    eventNames.forEach((event_name) => {
+      node.on(event_name, (args) => {
+        dispatcher(event_name, { ...args });
+      });
+    });
+  });
+
+  afterUpdate(() => {
+    node.setAttrs(
+      excludeKeys($$restProps, init_only_props) as Konva.ShapeConfig
+    );
+  });
+
+  onDestroy(() => {
+    if (node) node.remove();
+  });
+</script>
+
+{#if node}
+  <slot />
+{/if}

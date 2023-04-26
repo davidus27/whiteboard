@@ -9,8 +9,8 @@
 
     export let width: number;
     export let height: number;
-    export let scale = 1;
     export let draggable = false;
+    const scale = 1;
   
     export let stage: Konva.Stage;
     setContext(stageKey, {
@@ -34,8 +34,10 @@
     });
   
     afterUpdate(() => {
-      stage.scaleX(scale);
-      stage.scaleY(scale);
+      // probably not gonna do this since we want to keep the scale
+      // alternative would be store scale as a prop and update it
+      // stage.scaleX(scale);
+      // stage.scaleY(scale);
       stage.setAttr("width", width);
       stage.setAttr("height", height);
     });
